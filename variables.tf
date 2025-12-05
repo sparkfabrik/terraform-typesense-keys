@@ -7,6 +7,7 @@ variable "collection_prefix" {
 variable "secret_namespace" {
   description = "The Kubernetes namespace where the secret will be created"
   type        = string
+  default     = ""
 }
 
 variable "secret_name" {

@@ -90,7 +90,7 @@ module "typesense_keys" {
 |------|-------------|------|---------|:--------:|
 | <a name="input_collection_prefix"></a> [collection\_prefix](#input\_collection\_prefix) | The collection prefix for Typesense keys | `string` | `""` | no |
 | <a name="input_secret_name"></a> [secret\_name](#input\_secret\_name) | The name of the Kubernetes secret | `string` | `""` | no |
-| <a name="input_secret_namespace"></a> [secret\_namespace](#input\_secret\_namespace) | The Kubernetes namespace where the secret will be created | `string` | n/a | yes |
+| <a name="input_secret_namespace"></a> [secret\_namespace](#input\_secret\_namespace) | The Kubernetes namespace where the secret will be created | `string` | `""` | no |
 | <a name="input_typesense_external_host"></a> [typesense\_external\_host](#input\_typesense\_external\_host) | The Typesense host URL | `string` | n/a | yes |
 | <a name="input_typesense_external_port"></a> [typesense\_external\_port](#input\_typesense\_external\_port) | The Typesense port | `number` | `443` | no |
 | <a name="input_typesense_external_proto"></a> [typesense\_external\_proto](#input\_typesense\_external\_proto) | The Typesense protocol | `string` | `"https"` | no |
