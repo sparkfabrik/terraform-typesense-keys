@@ -9,14 +9,14 @@ This module creates Typesense API keys and optionally a Kubernetes secret.
 - **Kubernetes secret**: Contains host URL, API keys, and collection prefix (optional).
 
 ## Diagram
-
+```mermaid
 flowchart LR
   typesense_module["Typesense Keys Module"] -- "generates" --> api_keys["API Keys (RO + Full Access)"]
   api_keys -- "stored in" --> k8s_secret["Kubernetes Secret"]
   terraform_config["Terraform Config"] -- "configures" --> typesense_provider["Typesense Provider"]
   typesense_provider -- "manages" --> typesense_module
   projects["Projects"] -- "consumes" --> k8s_secret
-
+```
 ## Usage
 
 ### Basic usage with collection prefix
