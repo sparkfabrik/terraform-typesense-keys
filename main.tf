@@ -32,7 +32,7 @@ resource "kubernetes_secret_v1" "typesense_credentials" {
 
   metadata {
     name      = var.secret_name
-    namespace = var.namespace
+    namespace = var.secret_namespace
   }
 
   type = "Opaque"
