@@ -26,7 +26,7 @@ module "typesense_keys" {
   source = "github.com/sparkfabrik/terraform-typesense-keys?ref=X.Y.Z"
   
   collection_prefix        = "myproject"
-  namespace                = "myproject-stage"
+  secret_namespace         = "myproject-stage"
   secret_name              = "myproject-typesense"
   typesense_external_host  = "typesense.example.com"
   typesense_external_port  = 443
@@ -45,7 +45,7 @@ If you omit the `collection_prefix`, the API keys will have access to all collec
 module "typesense_keys" {
   source = "github.com/sparkfabrik/terraform-typesense-keys?ref=X.Y.Z"
   
-  namespace                = "myproject-stage"
+  secret_namespace         = "myproject-stage"
   secret_name              = "myproject-typesense"
   typesense_external_host  = "typesense.example.com"
   typesense_internal_host  = "typesense.default.svc.cluster.local"
