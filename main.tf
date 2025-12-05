@@ -7,7 +7,7 @@ resource "random_password" "readonly_key" {
 # Read-only key for searching documents
 resource "typesense_key" "readonly" {
   actions     = ["documents:search"]
-  collections = ["${var.collection_prefix}_.+"]
+  collections = [var.collection_prefix != "" ? "${var.collection_prefix}_.+" : "*"]
   value       = random_password.readonly_key.result
   description = "RO key ${var.collection_prefix}"
 }
@@ -21,13 +21,15 @@ resource "random_password" "full_access_key" {
 # Full access key with all permissions
 resource "typesense_key" "full_access" {
   actions     = ["*"]
-  collections = ["${var.collection_prefix}_.+"]
+  collections = [var.collection_prefix != "" ? "${var.collection_prefix}_.+" : "*"]
   value       = random_password.full_access_key.result
   description = "Full access key ${var.collection_prefix}"
 }
 
 # Kubernetes secret with Typesense credentials
 resource "kubernetes_secret_v1" "typesense_credentials" {
+  count = var.secret_name != "" ? 1 : 0
+
   metadata {
     name      = var.secret_name
     namespace = var.namespace
@@ -44,6 +46,6 @@ resource "kubernetes_secret_v1" "typesense_credentials" {
     TYPESENSE_INTERNAL_PROTO     = var.typesense_internal_proto
     TYPESENSE_API_KEY_READ_ONLY  = typesense_key.readonly.value
     TYPESENSE_API_KEY_READ_WRITE = typesense_key.full_access.value
-    TYPESENSE_COLLECTION_PREFIX  = "${var.collection_prefix}_"
+    TYPESENSE_COLLECTION_PREFIX  = var.collection_prefix != "" ? "${var.collection_prefix}_" : ""
   }
 }

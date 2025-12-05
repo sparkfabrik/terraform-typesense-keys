@@ -1,6 +1,7 @@
 variable "collection_prefix" {
   description = "The collection prefix for Typesense keys"
   type        = string
+  default     = ""
 }
 
 variable "namespace" {
@@ -11,6 +12,7 @@ variable "namespace" {
 variable "secret_name" {
   description = "The name of the Kubernetes secret"
   type        = string
+  default     = ""
 }
 
 variable "typesense_external_host" {

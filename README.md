@@ -1,12 +1,12 @@
 # Typesense Keys Module
 
-This module creates Typesense API keys and a Kubernetes secret for Drupal projects.
+This module creates Typesense API keys and optionally a Kubernetes secret.
 
 ## What it creates
 
-- **Read-only API key**: For document search operations
-- **Full access API key**: For all Typesense operations  
-- **Kubernetes secret**: Contains host URL, API keys, and collection prefix
+- **Read-only API key**: For document search operations.
+- **Full access API key**: For all Typesense operations. 
+- **Kubernetes secret**: Contains host URL, API keys, and collection prefix (optional).
 
 ## Diagram
 
@@ -15,19 +15,54 @@ flowchart LR
   api_keys -- "stored in" --> k8s_secret["Kubernetes Secret"]
   terraform_config["Terraform Config"] -- "configures" --> typesense_provider["Typesense Provider"]
   typesense_provider -- "manages" --> typesense_module
-  drupal_projects["Drupal Projects"] -- "consumes" --> k8s_secret
-
+  projects["Projects"] -- "consumes" --> k8s_secret
 
 ## Usage
 
+### Basic usage with collection prefix
+
 ```terraform
 module "typesense_keys" {
-  source               = "github.com/sparkfabrik/terraform-typesense-keys?ref=X.Y.Z"
+  source = "github.com/sparkfabrik/terraform-typesense-keys?ref=X.Y.Z"
   
-  collection_prefix = "myproject"
-  namespace         = "myproject-1200-stage"
-  secret_name       = "drupal-stage-1200-typesense"
-  typesense_host    = "https://typesense.example.com"
+  collection_prefix        = "myproject"
+  namespace                = "myproject-stage"
+  secret_name              = "myproject-typesense"
+  typesense_external_host  = "typesense.example.com"
+  typesense_external_port  = 443
+  typesense_external_proto = "https"
+  typesense_internal_host  = "typesense.default.svc.cluster.local"
+  typesense_internal_port  = 8108
+  typesense_internal_proto = "http"
+}
+```
+
+### Without collection prefix (all collections)
+
+If you omit the `collection_prefix`, the API keys will have access to all collections (`*`):
+
+```terraform
+module "typesense_keys" {
+  source = "github.com/sparkfabrik/terraform-typesense-keys?ref=X.Y.Z"
+  
+  namespace                = "myproject-stage"
+  secret_name              = "myproject-typesense"
+  typesense_external_host  = "typesense.example.com"
+  typesense_internal_host  = "typesense.default.svc.cluster.local"
+}
+```
+
+### Without Kubernetes secret
+
+If you only need the API keys without creating a Kubernetes secret, omit the `secret_name`:
+
+```terraform
+module "typesense_keys" {
+  source = "github.com/sparkfabrik/terraform-typesense-keys?ref=X.Y.Z"
+  
+  collection_prefix        = "myproject"
+  typesense_external_host  = "typesense.example.com"
+  typesense_internal_host  = "typesense.default.svc.cluster.local"
 }
 ```
 
@@ -53,9 +88,9 @@ module "typesense_keys" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_collection_prefix"></a> [collection\_prefix](#input\_collection\_prefix) | The collection prefix for Typesense keys | `string` | n/a | yes |
+| <a name="input_collection_prefix"></a> [collection\_prefix](#input\_collection\_prefix) | The collection prefix for Typesense keys | `string` | `""` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The Kubernetes namespace where the secret will be created | `string` | n/a | yes |
-| <a name="input_secret_name"></a> [secret\_name](#input\_secret\_name) | The name of the Kubernetes secret | `string` | n/a | yes |
+| <a name="input_secret_name"></a> [secret\_name](#input\_secret\_name) | The name of the Kubernetes secret | `string` | `""` | no |
 | <a name="input_typesense_external_host"></a> [typesense\_external\_host](#input\_typesense\_external\_host) | The Typesense host URL | `string` | n/a | yes |
 | <a name="input_typesense_external_port"></a> [typesense\_external\_port](#input\_typesense\_external\_port) | The Typesense port | `number` | `443` | no |
 | <a name="input_typesense_external_proto"></a> [typesense\_external\_proto](#input\_typesense\_external\_proto) | The Typesense protocol | `string` | `"https"` | no |
