@@ -22,7 +22,7 @@ flowchart LR
 
 ```terraform
 module "typesense_keys" {
-  source = "./modules/typesense_keys"
+  source               = "github.com/sparkfabrik/terraform-typesense-keys?ref=X.Y.Z"
   
   collection_prefix = "myproject"
   namespace         = "myproject-1200-stage"
