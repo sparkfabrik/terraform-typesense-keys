@@ -1,10 +1,18 @@
 terraform {
-  required_version = ">= 1.5"
+  required_version = ">= 1.2"
 
   required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 5.13"
+    typesense = {
+      source  = "cysp/typesense"
+      version = "0.0.5"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.4.3"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.21"
     }
   }
 }
