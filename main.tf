@@ -33,6 +33,10 @@ resource "kubernetes_secret_v1" "typesense_credentials" {
   metadata {
     name      = var.secret_name
     namespace = var.secret_namespace
+
+    labels = {
+      "managed-by" = "terraform"
+    }
   }
 
   type = "Opaque"
